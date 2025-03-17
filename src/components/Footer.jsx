@@ -15,19 +15,14 @@ const Footer = () => {
   };
 
   return (
-    <footer className="mt-10 relative bg-black/60 backdrop-blur-md border-t border-neon-pink/30">
+    <footer className="mt-10 relative bg-[#0c0c18] border-t border-neon-pink/30 transition-footer">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
-          {' '}
-          {/* Added text-center on mobile */}
-          {/* About Section */}
           <div className="space-y-4">
             <Link
               to="/"
               className="flex items-center space-x-2 justify-center md:justify-start"
             >
-              {' '}
-              {/* Centered on mobile */}
               <span className="font-orbitron font-bold text-xl text-gradient">
                 Aavishkaar-2025
               </span>
@@ -37,7 +32,6 @@ const Footer = () => {
               festival of the year.
             </p>
           </div>
-          {/* Quick Links */}
           <div>
             <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
               Quick Links
@@ -77,45 +71,27 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          {/* Contact Info */}
           <div>
             <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
               Contact Us
             </h3>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2 justify-center md:justify-start">
-                {' '}
-                {/* Centered on mobile */}
                 <Mail className="w-4 h-4 text-neon-pink" />
-                <span className="text-gray-300">{ieeeData.email}</span>
+                <span className="text-gray-300"><a href='mailto:ieee-ritb@gmail.com'>{ieeeData.email}</a></span>
               </li>
               <li className="flex items-center space-x-2 justify-center md:justify-start">
-                {' '}
-                {/* Centered on mobile */}
-                <MapPin className="w-4 h-4 text-hacker-green" />
-                <span className="text-gray-300">{ieeeData.address}</span>
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-hacker-green" />
+                {/* <i class='fas fa-location-arrow' style='font-size:24px'></i> */}
+                <span className="text-gray-300"><a href='https://maps.app.goo.gl/fkGesiVRNP8qBArJ9'>{ieeeData.address}</a></span>
               </li>
             </ul>
           </div>
-          {/* Social Links */}
           <div>
             <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
               Follow Us
             </h3>
             <div className="flex space-x-4 justify-center md:justify-start">
-              {/* Centered on mobile */}
-              {/* <a
-                href="#"
-                className="text-gray-300 hover:text-neon-pink transition-colors"
-              >
-                <Twitter className="w-6 h-6" />
-              </a> */}
-              {/* <a
-                href="#"
-                className="text-gray-300 hover:text-neon-pink transition-colors"
-              >
-                <Github className="w-6 h-6" />
-              </a> */}
               <a
                 href={ieeeData.socials.linkedin}
                 className="text-gray-300 hover:text-neon-pink transition-colors"
@@ -133,12 +109,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-neon-pink/30 flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-12 pt-8 border-t border-neon-pink/30 flex flex-col md:flex-row justify-between items-center feature-white">
           <p className="text-gray-300 text-sm text-center md:text-left">
-            {' '}
-            {/* Centered on mobile */}© 2025 TechFest. All rights reserved.
+            © 2025 TechFest. All rights reserved.
           </p>
           <button
             onClick={scrollToTop}
@@ -153,4 +126,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;  
