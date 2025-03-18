@@ -6,68 +6,79 @@ const Sponsors = () => {
   return (
     <>
       {/* Header */}
-      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 text-center">
+        <div className="container mx-auto px-6">
           <Link
             to="/"
-            className="inline-flex items-center text-white/80 hover:text-white transition-colors mb-6 mt-4"
+            className="inline-flex items-center text-white/80 hover:text-white transition-colors mb-6"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Home
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mt-4">All Sponsors</h1>
-          <p className="mt-4 text-lg text-white/80 max-w-2xl">
+
+          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-wide">
+            Our Sponsors
+          </h1>
+          <p className="mt-4 text-lg text-white/80 max-w-3xl mx-auto">
             Meet the amazing sponsors behind Aavishkaar'25. From industry
-            leaders to tech innovators, they're here to make this event
-            possible.
+            leaders to tech innovators, they are making this event possible.
           </p>
         </div>
       </section>
 
       {/* Sponsors Grid */}
-      <section className="py-8 px-4 flex-1">
+      <section className="py-12 px-6 bg-[#1A1A2E]">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {sponsors.map((sponsor, index) => (
               <div
                 key={index}
-                className="bg-[#1E1E2D] rounded-xl overflow-hidden hover:shadow-lg hover:shadow-[#4F33B3]/20 transition-shadow"
+                className="relative bg-[#1E1E2D]/90 border border-[#4F33B3]/30 rounded-xl p-8 flex flex-col items-center w-full sm:w-[300px] md:w-[320px] lg:w-[350px] shadow-lg hover:shadow-[#4F33B3]/50 transition-all"
               >
-                <div className="flex flex-col items-center p-8 h-full">
-                  <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-[#E056C1]/50 mb-6">
-                    <img
-                      src={sponsor.logo}
-                      alt={sponsor.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <span className="px-3 py-1 bg-[#E056C1] rounded-full text-xs font-medium mb-4">
-                    {sponsor.tier}
-                  </span>
-                  <h3 className="text-xl font-bold">{sponsor.name}</h3>
-                  <p className="mt-3 text-sm text-white/80">
-                    {sponsor.description}
-                  </p>
-                  <div className="flex justify-center space-x-6 mt-6">
-                    <a
-                      href={sponsor.twitter || "#"}
-                      className="text-white/70 hover:text-[#E056C1] transition-colors"
-                    >
-                      <Twitter className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={sponsor.linkedin || "#"}
-                      className="text-white/70 hover:text-[#E056C1] transition-colors"
-                    >
-                      <Linkedin className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={sponsor.website || "#"}
-                      className="text-white/70 hover:text-[#E056C1] transition-colors"
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                    </a>
-                  </div>
+                {/* Tier Badge */}
+                <span className="absolute top-3 right-3 px-3 py-1 text-xs font-medium text-white rounded-full bg-gradient-to-r from-[#E056C1] to-[#4F33B3] shadow-md">
+                  {sponsor.tier}
+                </span>
+
+                {/* Sponsor Logo */}
+                <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-[#E056C1]/60 shadow-md">
+                  <img
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+
+                {/* Sponsor Name */}
+                <h3 className="text-2xl font-bold mt-4 text-white">
+                  {sponsor.name}
+                </h3>
+
+                {/* Sponsor Description */}
+                <p className="mt-3 text-sm text-white/70 text-center">
+                  {sponsor.description}
+                </p>
+
+                {/* Social Links */}
+                <div className="flex space-x-4 mt-6">
+                  <a
+                    href={sponsor.twitter || "#"}
+                    className="text-white/70 hover:text-[#E056C1] transition-all hover:scale-110"
+                  >
+                    <Twitter className="h-5 w-5" />
+                  </a>
+                  <a
+                    href={sponsor.linkedin || "#"}
+                    className="text-white/70 hover:text-[#E056C1] transition-all hover:scale-110"
+                  >
+                    <Linkedin className="h-5 w-5" />
+                  </a>
+                  <a
+                    href={sponsor.website || "#"}
+                    className="text-white/70 hover:text-[#E056C1] transition-all hover:scale-110"
+                  >
+                    <ExternalLink className="h-5 w-5" />
+                  </a>
                 </div>
               </div>
             ))}

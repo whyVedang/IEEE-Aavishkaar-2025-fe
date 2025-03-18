@@ -17,7 +17,7 @@ const Contact = () => {
           </Link>
           <h1 className="text-4xl md:text-5xl font-bold mt-4">Contact Us</h1>
           <p className="mt-4 text-lg text-white/80 max-w-2xl">
-            Have questions about Aavishkaar'25? Get in touch with our team and we'll be happy to help.
+            Have questions about RIT-B TechFest'25? Get in touch with our team and we'll be happy to help.
           </p>
         </div>
       </section>
@@ -54,7 +54,7 @@ const Contact = () => {
               <div className="mt-8 pt-8 border-t border-white/10">
                 <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
                 <p className="text-white/80 mb-6">
-                  Follow us on social media for updates and announcements about Aavishkaar'25.
+                  Follow us on social media for updates and announcements about RIT-B TechFest'25.
                 </p>
                 <div className="flex space-x-4">
                   <a href={ieeeData.socials?.instagram || "#"} className="bg-[#1E1E2D] hover:bg-[#2E1E8A] p-3 rounded-full text-white/70 hover:text-white transition-colors">
