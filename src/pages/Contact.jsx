@@ -36,7 +36,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="text-sm text-white/70">Email</p>
-                    <p className="text-white">{ieeeData.email}</p>
+                    <p className="text-white"><a href='mailto:ieee-ritb@gmail.com'>{ieeeData.email}</a></p>
                   </div>
                 </div>
                 
@@ -46,7 +46,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="text-sm text-white/70">Address</p>
-                    <p className="text-white">{ieeeData.address}</p>
+                    <p className="text-white"><a href='https://maps.app.goo.gl/fkGesiVRNP8qBArJ9'>{ieeeData.address}</a></p>
                   </div>
                 </div>
               </div>
