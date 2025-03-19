@@ -95,6 +95,18 @@ const EventDetail = () => {
           teamSize: data.maxParticipantsPerTeam || defaultEventData.teamSize,
           longDescription: data.longDescription || defaultEventData.longDescription,
           prizes: data.prizes || defaultEventData.prizes,
+          date: data.date
+          ? new Date(data.date).toLocaleDateString(
+              "en-US",
+              {
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              }
+            )
+          : "Date TBA",
         };
         
         setEventDetails(completeDetails);
@@ -307,7 +319,7 @@ const EventDetail = () => {
               <div className="flex items-center text-white/80">
                 <Clock className="h-5 w-5 mr-2" />
                 <span>
-                  {eventDetails.duration}
+                  {eventDetails.date}
                 </span>
               </div>
               <div className="flex items-center text-white/80">
