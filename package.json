@@ -12,6 +12,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "framer-motion": "^12.5.0",
+    "gsap": "^3.12.7",
     "lucide-react": "^0.479.0",
     "npm": "^11.2.0",
     "react": "^19.0.0",
