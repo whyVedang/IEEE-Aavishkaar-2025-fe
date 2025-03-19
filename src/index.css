@@ -17,6 +17,8 @@
   }
 }
 
+
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
@@ -164,5 +166,57 @@ body {
 
 .transition-footer a:hover {
   color: #ff00ff; /* Neon pink hover effect */
+}
+
+/* General Styles */
+body {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Button Hover Animation */
+.hover-button {
+  position: relative;
+  display: inline-block;
+  color: #e0e0e0; /* Light gray */
+  text-decoration: none;
+}
+
+.hover-button::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  bottom: -3px;
+  left: 0;
+  background-color: #ff1493; /* Neon pink */
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.hover-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-button:hover {
+  color: #ff1493; /* Neon pink */
+}
+
+/* Gradient Text for Logo */
+.text-gradient {
+  background-image: linear-gradient(90deg, #ff1493, #00ffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Mobile Menu Styling */
+.md\\:hidden .hover-button {
+  padding-left: 1rem;
+}
+
+/* Transition Effects */
+.transition-all {
+  transition: all ease-in-out 0.3s;
 }
 

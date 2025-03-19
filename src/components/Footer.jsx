@@ -1,17 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router";
 import {
   Linkedin,
   Instagram,
+  Github,
   ArrowUp,
   Mail,
   MapPin,
-} from 'lucide-react';
+} from "lucide-react";
 import ieeeData from "../configs/ieee-data.config.json";
+
+// Linktree Logo SVG Component
+const LinktreeIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <path d="M12 2v20" />
+    <path d="M6 7l6-5 6 5" />
+    <path d="M6 12l6-5 6 5" />
+    <path d="M6 17l6-5 6 5" />
+  </svg>
+);
 
 const Footer = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -23,7 +45,7 @@ const Footer = () => {
               to="/"
               className="flex items-center space-x-2 justify-center md:justify-start"
             >
-              <span className="font-orbitron font-bold text-xl text-gradient">
+              <span className="font-orbitron font-bold text-xl">
                 RIT-B TechFest-2025
               </span>
             </Link>
@@ -33,7 +55,7 @@ const Footer = () => {
             </p>
           </div>
           <div>
-            <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
+            <h3 className="font-orbitron text-lg font-bold mb-4">
               Quick Links
             </h3>
             <ul className="space-y-2">
@@ -72,39 +94,58 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
+            <h3 className="font-orbitron text-lg font-bold mb-4">
               Contact Us
             </h3>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2 justify-center md:justify-start">
                 <Mail className="w-4 h-4 text-neon-pink" />
-                <span className="text-gray-300"><a href='mailto:ieee-ritb@gmail.com'>{ieeeData.email}</a></span>
+                <span className="text-gray-300">
+                  <a href="mailto:ieee-ritb@gmail.com">{ieeeData.email}</a>
+                </span>
               </li>
               <li className="flex items-center space-x-2 justify-center md:justify-start">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-hacker-green" />
-                {/* <i class='fas fa-location-arrow' style='font-size:24px'></i> */}
-                <span className="text-gray-300"><a href='https://maps.app.goo.gl/fkGesiVRNP8qBArJ9'>{ieeeData.address}</a></span>
+                <span className="text-gray-300">
+                  <a href="https://maps.app.goo.gl/fkGesiVRNP8qBArJ9">
+                    {ieeeData.address}
+                  </a>
+                </span>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-orbitron text-lg font-bold mb-4 text-gradient">
+            <h3 className="font-orbitron text-lg font-bold mb-4">
               Follow Us
             </h3>
             <div className="flex space-x-4 justify-center md:justify-start">
               <a
                 href={ieeeData.socials.linkedin}
                 className="text-gray-300 hover:text-neon-pink transition-colors"
-                target='_blank'
+                target="_blank"
               >
                 <Linkedin className="w-6 h-6" />
               </a>
               <a
                 href={ieeeData.socials.instagram}
                 className="text-gray-300 hover:text-neon-pink transition-colors"
-                target='_blank'
+                target="_blank"
               >
                 <Instagram className="w-6 h-6" />
+              </a>
+              <a
+                href={ieeeData.socials.github}
+                className="text-gray-300 hover:text-neon-pink transition-colors"
+                target="_blank"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+              <a
+                href={ieeeData.socials.linktree}
+                className="text-gray-300 hover:text-neon-pink transition-colors"
+                target="_blank"
+              >
+                <LinktreeIcon />
               </a>
             </div>
           </div>
@@ -126,4 +167,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;  
+export default Footer;
