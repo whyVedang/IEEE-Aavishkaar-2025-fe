@@ -34,6 +34,9 @@ const Hero = () => {
             RIT-B
           </h2>
 
+          {/* Spacing between RIT-B and TECHFEST */}
+          <div className="mt-2 sm:mt-4 md:mt-5 lg:mt-6"></div>
+
           {/* TECHFEST with Arcade Style Font */}
           <h1
             className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-wide text-white text-center"

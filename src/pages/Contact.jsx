@@ -1,6 +1,29 @@
-import { Mail, MapPin, ArrowLeft } from 'lucide-react';
+import { Mail, MapPin, ArrowLeft,
+  Linkedin,
+  Instagram,
+  Github} from 'lucide-react';
 import { Link } from "react-router";
 import ieeeData from "../configs/ieee-data.config.json";
+
+const LinktreeIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <path d="M12 2v20" />
+    <path d="M6 7l6-5 6 5" />
+    <path d="M6 12l6-5 6 5" />
+    <path d="M6 17l6-5 6 5" />
+  </svg>
+);
 
 const Contact = () => {
   return (
@@ -70,6 +93,13 @@ const Contact = () => {
                       <rect x="2" y="9" width="4" height="12"></rect>
                       <circle cx="4" cy="4" r="2"></circle>
                     </svg>
+                  </a>
+                  <a href={ieeeData.socials?.github || "#"} className="bg-[#1E1E2D] hover:bg-[#2E1E8A] p-3 rounded-full text-white/70 hover:text-white transition-colors">
+                    <Github className="w-6 h-6" />
+                  </a>
+                  <a
+                    href={ieeeData.socials.linktree || "#"} className="bg-[#1E1E2D] hover:bg-[#2E1E8A] p-3 rounded-full text-white/70 hover:text-white transition-colors">
+                    <LinktreeIcon className="w-6 h-6" />
                   </a>
                 </div>
               </div>
