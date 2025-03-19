@@ -1,19 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
-import { eventsData, eventCategories } from "../configs/events.config";
+import { eventImages } from "../configs/eventImages.config";
+import { API_ENDPOINTS } from "../configs/api.config";
 
 const Events = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState("All");
+
+  useEffect(() => {
+    fetch(API_ENDPOINTS.EVENTS)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched events:", data);
+        const transformedEvents = data.map((event, index) => ({
+          id: event.id,
+          title: event.eventName,
+          category: event.eventTheme,
+          description: event.eventDescription,
+          date: event.date
+            ? new Date(event.eventTimeline.dates[0]).toLocaleDateString(
+                "en-US",
+                {
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                }
+              )
+            : "Date TBA",
+          location: event.eventVenue || "TBA",
+          img: eventImages[event.eventTheme] || eventImages.Robotics,
+        }));
+        console.log("Transformed events:", transformedEvents);
+        setEvents(transformedEvents);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+        setError("Failed to load events. Please try again later.");
+        setLoading(false);
+      });
+  }, []);
+
+  // Dynamically generate categories from fetched events
+  const eventCategories = [
+    "All",
+    ...new Set(events.map((event) => event.category)),
+  ];
 
   const filteredEvents =
     activeCategory === "All"
-      ? eventsData
-      : eventsData.filter((event) => event.category === activeCategory);
+      ? events
+      : events.filter((event) => event.category === activeCategory);
+
+  if (loading) {
+    return (
+      <section className="bg-[#0c0c18] min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E056C1]"></div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="bg-[#0c0c18] min-h-screen flex items-center justify-center">
+        <div className="text-center text-red-500">{error}</div>
+      </section>
+    );
+  }
 
   return (
     <>
-
       {/* Header */}
       <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16">
         <div className="container mx-auto px-4">
@@ -60,7 +121,7 @@ const Events = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEvents.map((event) => (
               <Link
-                to={`/events/${event.id}`}
+                to={event.id}
                 key={event.id}
                 className="bg-[#1E1E2D] rounded-xl overflow-hidden hover:shadow-lg hover:shadow-[#4F33B3]/20 transition-shadow"
               >
@@ -91,7 +152,6 @@ const Events = () => {
           </div>
         </div>
       </section>
-
     </>
   );
 };

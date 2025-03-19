@@ -1,11 +1,77 @@
 import { ArrowRight } from "lucide-react";
 import { eventsData } from "../configs/events.config";
 import { Link } from "react-router";
+import { useState, useEffect } from "react"; // Add these imports
+import { eventImages } from "../configs/eventImages.config";
+import { API_ENDPOINTS } from "../configs/api.config";
 
 const FeaturedEvents = () => {
-  // Filter events that are marked as featured
-  const featuredEvents = eventsData.filter((event) => event.featured);
+  // Add state management for API data
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Add data fetching effect
+  useEffect(() => {
+    fetch(API_ENDPOINTS.EVENTS)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched events:", data);
+        const transformedEvents = data.map((event, index) => ({
+          id: event.id,
+          title: event.eventName,
+          category: event.eventTheme,
+          description: event.eventDescription,
+          date: event.date
+            ? new Date(event.eventTimeline.dates[0]).toLocaleDateString(
+                "en-US",
+                {
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                }
+              )
+            : "Date TBA",
+          venue: event.eventVenue || "TBA",
+          img: eventImages[event.eventTheme] || eventImages.Robotics,
+          organiser: event.organiser ? event.organiser : "",
+        }));
+        setEvents(transformedEvents);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+        setError("Failed to load events. Please try again later.");
+        setLoading(false);
+      });
+  }, []);
+
+  // Add loading state
+  if (loading) {
+    return (
+      <section id="featured" className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E056C1]"></div>
+        </div>
+      </section>
+    );
+  }
+
+  // Add error state
+  if (error) {
+    return (
+      <section id="featured" className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]">
+        <div className="text-center text-red-500">{error}</div>
+      </section>
+    );
+  }
+
+  // Get the first 4 events as featured
+  const featuredEvents = events.filter(event => event.organiser === "SB");
+
+  // Your existing render code remains the same, but use featuredEvents from API
   return (
     <section id="featured" className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]">
       <div className="mb-6 flex items-center justify-center">
@@ -69,5 +135,6 @@ const FeaturedEvents = () => {
     </section>
   );
 };
+
 
 export default FeaturedEvents;

@@ -11,7 +11,8 @@ import {
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { motion } from "framer-motion";
-import { eventsData } from "../configs/events.config";
+import { API_ENDPOINTS } from "../configs/api.config";
+// Import default data for missing fields
 import { getEventDetails } from "../configs/eventDetails.config";
 import { getRules } from "../configs/rules.config";
 import { getFaqs } from "../configs/faqs.config";
@@ -20,53 +21,100 @@ const EventDetail = () => {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [eventDetails, setEventDetails] = useState(null);
+  const [defaultDetails, setDefaultDetails] = useState(null);
   const [rules, setRules] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedFaq, setExpandedFaq] = useState(null);
-
-  useEffect(() => {
-    // Find the event with the matching ID from the config files
-    const fetchEventData = () => {
-      // Parse the ID as a number since URL params are strings
-      const eventId = parseInt(id, 10);
-
-      // Find the basic event in our config data
-      const foundEvent = eventsData.find((event) => event.id === eventId);
-
-      // Get additional data from other config files
-      const details = getEventDetails(eventId);
-      const eventRules = getRules(eventId);
-      const eventFaqs = getFaqs(eventId);
-
-      if (foundEvent && details) {
-        setEvent(foundEvent);
-        setEventDetails(details);
-        setRules(eventRules);
-        setFaqs(eventFaqs);
-      }
-
-      // Simulate a loading delay
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    };
-
-    fetchEventData();
-  }, [id]);
+  const [expandedFaqs, setExpandedFaqs] = useState([]);
 
   const toggleFaq = (index) => {
-    if (expandedFaq === index) {
-      setExpandedFaq(null);
-    } else {
-      setExpandedFaq(index);
-    }
+    setExpandedFaqs(prevExpandedFaqs => 
+      prevExpandedFaqs.includes(index)
+        ? prevExpandedFaqs.filter(i => i !== index) // Remove if already expanded
+        : [...prevExpandedFaqs, index] // Add if not expanded
+    );
   };
+
+  const formatPrizes = (prizesArray) => {
+    if (!Array.isArray(prizesArray)) return [];
+    
+    return prizesArray.map(prize => {
+      if (typeof prize === 'string') return prize;
+      
+      // Handle prize objects
+      const position = prize.position;
+      const amount = prize.amount;
+      
+      // Add ordinal suffix to position
+      let suffix = 'th';
+      if (position % 10 === 1 && position % 100 !== 11) suffix = 'st';
+      else if (position % 10 === 2 && position % 100 !== 12) suffix = 'nd';
+      else if (position % 10 === 3 && position % 100 !== 13) suffix = 'rd';
+      
+      return `${position}${suffix} Place: ₹${amount.toLocaleString()}`;
+    });
+  };
+
+  // Integrate the API fetching logic
+    useEffect(() => {
+    fetch(API_ENDPOINTS.EVENT_DETAIL(id))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API responded with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Received event data from specific endpoint:", data);
+        
+        // Set both event and eventDetails
+        setEvent(data);
+        
+        // Merge API data with default data for eventDetails
+        const defaultEventData = getEventDetails();
+        setDefaultDetails(defaultEventData);
+        
+        // Find the matching default event details using the event I
+        
+        // Create the complete details by merging, prioritizing API data
+        const completeDetails = {
+          title: data.eventName || defaultEventData.title,
+          description: data.eventDescription || defaultEventData.description,
+          timeline: data.eventTimeline || defaultEventData.timeline,
+          theme: data.eventTheme || defaultEventData.theme,
+          maxParticipants: data.maxParticipantsPerTeam || defaultEventData.maxParticipants,
+          fees: data.registrationFees || defaultEventData.fees,
+          organiser: data.organiser || defaultEventData.organiser,
+          coordinators: data.coordinators || defaultEventData.coordinators,
+          rules: data.rules || defaultEventData.rules || [],
+          faqs: data.faqs || defaultEventData.faqs || [],
+          img: data.img || defaultEventData.img,
+          category: data.eventTheme || defaultEventData.category,
+          duration: data.duration || defaultEventData.duration,
+          location: data.eventVenue || defaultEventData.location,
+          teamSize: data.maxParticipantsPerTeam || defaultEventData.teamSize,
+          longDescription: data.longDescription || defaultEventData.longDescription,
+          prizes: data.prizes || defaultEventData.prizes,
+        };
+        
+        setEventDetails(completeDetails);
+        console.log("Complete ", completeDetails);
+        
+        // Set specific state items if needed
+        if (completeDetails.rules) setRules(completeDetails.rules);
+        if (completeDetails.faqs) setFaqs(completeDetails.faqs);
+        
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching event details:", error);
+        setLoading(false);
+      });
+  }, [id]);
 
   if (loading) {
     return (
       <main className="min-h-screen w-full bg-[#0D0D1A] text-white flex flex-col">
-        <Navbar />
         
         {/* Hero Section Skeleton */}
         <section className="relative">
@@ -125,7 +173,7 @@ const EventDetail = () => {
             
             {/* Rules Skeleton */}
             <div className="mb-12">
-              <div className="flex items-center mb-6">
+              <div className="flex itemAres-center mb-6">
                 <div className="w-8 h-8 rounded-full bg-[#1E1E2D] mr-3 animate-pulse"></div>
                 <div className="h-8 w-56 bg-[#1E1E2D] rounded-md animate-pulse"></div>
               </div>
@@ -181,21 +229,24 @@ const EventDetail = () => {
         </section>
         
         {/* Register Banner Skeleton */}
-        <section className="py-12 px-4 bg-gradient-to-r from-[#2E1E8A]/50 to-[#4F33B3]/50 mt-12">
-          <div className="container mx-auto text-center">
-            <div className="h-8 w-64 bg-[#1E1E2D] rounded-md mx-auto mb-4 animate-pulse"></div>
-            <div className="h-6 w-full max-w-2xl mx-auto mb-8 bg-[#1E1E2D] rounded-md animate-pulse"></div>
-            <div className="h-12 w-48 bg-[#1E1E2D] rounded-lg mx-auto animate-pulse"></div>
-          </div>
-        </section>
-        
-        <Footer />
+        <section className="py-12 px-4 bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] mt-12">
+      <div className="container mx-auto text-center">
+        <h2 className="text-3xl font-bold mb-4">Ready to participate?</h2>
+        <p className="text-white/80 max-w-2xl mx-auto mb-8">
+          Don't miss this opportunity to showcase your skills, learn from
+          peers, and win exciting prizes.
+        </p>
+        <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+          Register for {event?.title || event?.eventName}
+        </button>
+      </div>
+    </section>
       </main>
     );
   }
 
   // Handle case where event with the given ID was not found
-  if (!event || !eventDetails) {
+  if (!eventDetails) {
     return (
       <main className="min-h-screen w-full bg-[#0D0D1A] text-white flex flex-col">
         <div className="flex-1 flex flex-col items-center justify-center p-4">
@@ -223,8 +274,8 @@ const EventDetail = () => {
       <section className="relative">
         <div className="absolute inset-0 z-0">
           <img
-            src={event.img}
-            alt={event.title}
+            src={eventDetails?.img}
+            alt={eventDetails?.title}
             className="h-full w-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D1A]/80 to-[#0D0D1A]"></div>
@@ -246,22 +297,22 @@ const EventDetail = () => {
             className="mt-8"
           >
             <div className="inline-block px-3 py-1 rounded-full bg-[#E056C1] text-sm font-medium mb-4">
-              {event.category}
+              {eventDetails?.category}
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-              {event.title}
+              {eventDetails?.title}
             </h1>
 
             <div className="mt-6 flex flex-wrap items-center gap-6">
               <div className="flex items-center text-white/80">
                 <Clock className="h-5 w-5 mr-2" />
                 <span>
-                  {event.date} | {eventDetails.duration}
+                  {eventDetails.duration}
                 </span>
               </div>
               <div className="flex items-center text-white/80">
                 <MapPin className="h-5 w-5 mr-2" />
-                <span>{event.location}</span>
+                <span>{eventDetails?.location}</span>
               </div>
               <div className="flex items-center text-white/80">
                 <Users className="h-5 w-5 mr-2" />
@@ -271,7 +322,7 @@ const EventDetail = () => {
 
             <div className="mt-8 max-w-3xl">
               <p className="text-lg text-white/90 leading-relaxed">
-                {event.description}
+                {eventDetails?.description}
               </p>
             </div>
 
@@ -306,17 +357,17 @@ const EventDetail = () => {
               </p>
 
               {eventDetails.prizes && (
-                <div className="mt-8">
-                  <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
-                    Prizes
-                  </h3>
-                  <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-                    {eventDetails.prizes.map((prize, index) => (
-                      <li key={index}>{prize}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+  <div className="mt-8">
+    <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
+      Prizes
+    </h3>
+    <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
+      {formatPrizes(eventDetails.prizes).map((prize, index) => (
+        <li key={index}>{prize}</li>
+      ))}
+    </ul>
+  </div>
+)}
 
               {eventDetails.timeline && (
                 <div className="mt-8">
@@ -384,33 +435,34 @@ const EventDetail = () => {
               Frequently Asked Questions
             </h2>
             <div className="bg-[#1E1E2D] rounded-xl border border-[#4F33B3]/30 divide-y divide-[#4F33B3]/20">
-              {faqs.map((faq, index) => (
-                <div key={index} className="p-4 md:p-6">
-                  <button
-                    onClick={() => toggleFaq(index)}
-                    className="w-full flex justify-between items-center"
-                  >
-                    <h3 className="text-lg font-medium text-left">
-                      {faq.question}
-                    </h3>
-                    {expandedFaq === index ? (
-                      <ChevronUp className="h-5 w-5 text-[#E056C1]" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-[#E056C1]" />
-                    )}
-                  </button>
-                  {expandedFaq === index && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="mt-3 text-white/70"
-                    >
-                      <p>{faq.answer}</p>
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-            </div>
+  {faqs.map((faq, index) => (
+    <div 
+      key={index} 
+      className="p-4 md:p-6 cursor-pointer hover:bg-[#2A2A3D] transition-colors duration-200"
+      onClick={() => toggleFaq(index)}
+    >
+      <div className="w-full flex justify-between items-center">
+        <h3 className="text-lg font-medium text-left">
+          {faq.question}
+        </h3>
+        {expandedFaqs.includes(index) ? (
+          <ChevronUp className="h-5 w-5 text-[#E056C1]" />
+        ) : (
+          <ChevronDown className="h-5 w-5 text-[#E056C1]" />
+        )}
+      </div>
+      {expandedFaqs.includes(index) && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="mt-3 text-white/70"
+        >
+          <p>{faq.answer}</p>
+        </motion.div>
+      )}
+    </div>
+  ))}
+</div>
           </motion.div>
 
           {/* Contact */}
@@ -451,7 +503,7 @@ const EventDetail = () => {
             peers, and win exciting prizes.
           </p>
           <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
-            Register for {event.title}
+            Register for {event?.title}
           </button>
         </div>
       </section>
