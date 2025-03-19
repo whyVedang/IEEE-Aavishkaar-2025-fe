@@ -1,5 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import bgVideo from "../assets/bg.mp4";
+import Countdown from "./Countdown";
+
 
 const Hero = () => {
   return (
@@ -41,7 +43,7 @@ const Hero = () => {
               fontFamily: "'Press Start 2P', sans-serif",
               textShadow: "3px 3px 0px #FF007F, 6px 6px 0px rgba(0,0,0,0.2)",
             }}
-          >
+          ><Countdown/>
             TECHFEST
           </h1>
 
