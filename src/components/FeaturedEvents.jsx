@@ -19,11 +19,12 @@ const FeaturedEvents = () => {
         console.log("Fetched events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
+          img: event.img || eventImages[event.eventTheme] || eventImages.Robotics,
           title: event.eventName,
           category: event.eventTheme,
           description: event.eventDescription,
           date: event.date
-            ? new Date(event.eventTimeline.dates[0]).toLocaleDateString(
+            ? new Date(event.date).toLocaleDateString(
                 "en-US",
                 {
                   month: "long",
@@ -35,7 +36,6 @@ const FeaturedEvents = () => {
               )
             : "Date TBA",
           venue: event.eventVenue || "TBA",
-          img: eventImages[event.eventTheme] || eventImages.Robotics,
           organiser: event.organiser ? event.organiser : "",
         }));
         setEvents(transformedEvents);

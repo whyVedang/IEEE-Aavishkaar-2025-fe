@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://aavishkaar2025-be.onrender.com" || "https://super-zebra-jp7j7gvw4g925vx9-8000.app.github.dev";
+const API_BASE_URL = "https://aavishkaar2025-be.onrender.com" || "http://localhost:8000";
 
 export const API_ENDPOINTS = {
   EVENTS: `${API_BASE_URL}/aavishkaar/events`,

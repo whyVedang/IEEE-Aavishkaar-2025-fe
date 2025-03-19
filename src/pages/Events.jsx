@@ -21,7 +21,7 @@ const Events = () => {
           category: event.eventTheme,
           description: event.eventDescription,
           date: event.date
-            ? new Date(event.eventTimeline.dates[0]).toLocaleDateString(
+            ? new Date(event.date).toLocaleDateString(
                 "en-US",
                 {
                   month: "long",
@@ -33,7 +33,7 @@ const Events = () => {
               )
             : "Date TBA",
           location: event.eventVenue || "TBA",
-          img: eventImages[event.eventTheme] || eventImages.Robotics,
+          img: event.img||  eventImages[event.eventTheme] || eventImages.Robotics,
         }));
         console.log("Transformed events:", transformedEvents);
         setEvents(transformedEvents);
