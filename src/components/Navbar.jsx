@@ -45,7 +45,7 @@ const Navbar = () => {
             className="w-10 h-auto"
           />
           <span className="font-orbitron font-bold text-xl text-gradient ml-2">
-            Aavishkaar
+            RIT-B TechFest
           </span>
         </Link>
         <div className="hidden md:flex md:items-center">

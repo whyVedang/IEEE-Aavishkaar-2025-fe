@@ -24,7 +24,7 @@ const Footer = () => {
               className="flex items-center space-x-2 justify-center md:justify-start"
             >
               <span className="font-orbitron font-bold text-xl text-gradient">
-                Aavishkaar-2025
+                RIT-B TechFest-2025
               </span>
             </Link>
             <p className="text-gray-300">
