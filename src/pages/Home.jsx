@@ -61,14 +61,15 @@ const Home = () => {
       <motion.div variants={itemVariants}>
         <Hero />
       </motion.div>
+
+      <motion.div variants={itemVariants}>
+        <AnimatedFooter />
+      </motion.div>
       
       <motion.div variants={itemVariants}>
         <FeaturedEvents />
       </motion.div>
-      
-      <motion.div variants={itemVariants}>
-        <AnimatedFooter />
-      </motion.div>
+  
     </motion.div>
 </>
   );
