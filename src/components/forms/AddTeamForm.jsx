@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Send, User, Mail, Phone, UserCheck, Users, Trophy } from "lucide-react";
 import styles from "./AddTeamForm.module.css";  
 import { useParams } from "react-router";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 const AddTeamForm = () => {
   const {id}=useParams();
