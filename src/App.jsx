@@ -10,6 +10,7 @@ import ScrollToTop from "./utils/scroll-to-top";
 import Sponsors from "./pages/Sponsors";
 import Preloader from "./components/preloader";
 import { useState } from "react";
+import AddTeamForm from "./components/forms/AddTeamForm";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,8 @@ export default function App() {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/:id/teamregister" element={<AddTeamForm/>} />
+          
         </Routes>
         <ScrollToTop />
       </BaseLayout>

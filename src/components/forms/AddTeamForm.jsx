@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Send, User, Mail, Phone, UserCheck, Users, Trophy } from "lucide-react";
 import styles from "./AddTeamForm.module.css";  
+import { useParams } from "react-router";
+import axios, { Axios } from "axios";
 
 const AddTeamForm = () => {
+  const {id}=useParams();
+  const beUrl="https://aavishkaar2025-be.onrender.com/aavishkaar/teams/register";
   const [formData, setFormData] = useState({
     teamName: "",
     leader: {
@@ -17,11 +21,21 @@ const AddTeamForm = () => {
         usn: "",
       },
     ],
+    event:id,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      const response = await axios.post(beUrl, formData);
+    } catch (e) {
+      if (e.response) {
+        console.error("ServerError:", e.response.data);
+      } else {
+        console.error("RequestError:", e.message);
+      }
+    }
+
   };
 
   const handleChange = (e) => {

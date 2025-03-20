@@ -249,7 +249,7 @@ const EventDetail = () => {
           peers, and win exciting prizes.
         </p>
         <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
-          Register for {event?.title || event?.eventName}
+          Register for {event?.name || event?.eventName}
         </button>
       </div>
     </section>
@@ -339,9 +339,9 @@ const EventDetail = () => {
             </div>
 
             <div className="mt-8">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#E056C1] to-[#4F33B3] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+              <Link to={`/${id}/teamregister`} className="px-8 py-4 bg-gradient-to-r from-[#E056C1] to-[#4F33B3] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
                 Register Now
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -514,9 +514,9 @@ const EventDetail = () => {
             Don't miss this opportunity to showcase your skills, learn from
             peers, and win exciting prizes.
           </p>
-          <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+          <Link to={`/${id}/teamregister`} className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
             Register for {event?.title}
-          </button>
+          </Link>
         </div>
       </section>
     </main>
