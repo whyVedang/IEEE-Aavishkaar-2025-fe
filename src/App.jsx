@@ -8,14 +8,22 @@ import Contact from "./pages/Contact";
 import { BaseLayout } from "./layouts/base-layout";
 import ScrollToTop from "./utils/scroll-to-top";
 import Sponsors from "./pages/Sponsors";
+import Preloader from "./components/preloader";
+import { useState } from "react";
 import AddTeamForm from "./components/forms/AddTeamForm";
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   return (
     <Router>
       <BaseLayout>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              loading ? <Preloader setLoading={setLoading} /> : <Home />
+            }
+          />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/sponsors" element={<Sponsors />} />
