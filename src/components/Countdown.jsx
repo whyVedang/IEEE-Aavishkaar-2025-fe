@@ -171,7 +171,7 @@ const Countdown = () => {
     
     ctx.fillStyle = "rgba(13, 13, 26, 0.1)";
     ctx.textAlign = 'center';
-    ctx.font = "bold 120px Lato";
+    ctx.font = "bold 200px Lato";
     ctx.fillText(text, canvasWidth / 2, canvasHeight / 2 + 30);
     
     const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight).data;
