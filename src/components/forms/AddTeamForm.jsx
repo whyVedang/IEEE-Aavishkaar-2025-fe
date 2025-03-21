@@ -3,6 +3,7 @@ import { Send, User, Mail, Phone, UserCheck, Users, Trophy } from "lucide-react"
 import styles from "./AddTeamForm.module.css";  
 import { useParams } from "react-router";
 import axios from "axios";
+import logo from "../../assets/logo.png";
 
 const AddTeamForm = () => {
   const {id}=useParams();
@@ -90,8 +91,11 @@ const AddTeamForm = () => {
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <Trophy className="w-16 h-16 mx-auto mb-4 text-pink-500" />
-          <h1 className={`font-orbitron text-4xl md:text-5xl font-bold mb-4 ${styles.textGradient}`}>
+        <div className="flex justify-center pt-5">
+            <img src={logo} alt="logo" className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain" />
+        </div>
+
+          <h1 className={`font-orbitron pt-4 pb-2 text-4xl md:text-5xl font-bold mb-4 ${styles.textGradient}`}>
             Team Registration
           </h1>
           <p className="text-gray-400 text-lg">Create your dream team and start your journey</p>
