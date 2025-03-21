@@ -159,27 +159,6 @@ const Hero = () => {
             <span ref={techfestRef}>TECHFEST</span>
             <Countdown />
           </h1>
-<motion.p
-  className="text-base sm:text-lg md:text-xl font-bold text-white"
-  style={{
-    fontFamily: "'Orbitron', sans-serif",
-    textShadow: "2px 2px #FF007F, 4px 4px rgba(0,0,0,0.2)",
-    color: "#FF007F",
-  }}
-  animate={{
-    scale: [1, 1.2, 1],
-  }}
-  transition={{
-    duration: 2,
-    ease: "easeInOut",
-    times: [0, 0.5, 1],
-    repeat: Infinity,
-  }}
->
-  Days left to go!
-</motion.p>
-
-          
           {/* Register Button - Now below TECHFEST text */}
           <div ref={registerRef} className="mt-6">
             <a

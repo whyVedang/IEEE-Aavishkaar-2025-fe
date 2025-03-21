@@ -19,6 +19,9 @@ const Countdown = () => {
     seconds: '00',
     isLessThanDay: false
   });
+
+  // Add state for tracking screen size
+  const [isMobile, setIsMobile] = useState(false);
   
   const hoursDotsRef = useRef([]);
   const minutesDotsRef = useRef([]);
@@ -46,8 +49,17 @@ const Countdown = () => {
   
   const colors = ['61, 207, 236', '255, 244, 174', '255, 211, 218', '151, 211, 226'];
   const circleRadius = 2;
-  const canvasWidth = 300;
-  const canvasHeight = 200;
+  
+  // Make canvas dimensions responsive
+  const getCanvasDimensions = () => {
+    const isMobile = window.innerWidth <= 768;
+    return {
+      width: isMobile ? 150 : 300,
+      height: isMobile ? 120 : 200
+    };
+  };
+  
+  const [canvasDimensions, setCanvasDimensions] = useState(getCanvasDimensions());
   
   const previousValuesRef = useRef({
     hours: '00',
@@ -63,55 +75,85 @@ const Countdown = () => {
     days: true
   });
 
-  // Update countdown timer
+  // Handle resize events
   useEffect(() => {
-    const updateCountdown = () => {
-      try {
-        const startDate = new Date(scheduleData.startDate);
-        const currentDate = new Date();
-        const timeDiff = startDate - currentDate;
+    const handleResize = () => {
+      const isMobileView = window.innerWidth <= 768;
+      setIsMobile(isMobileView);
+      setCanvasDimensions(getCanvasDimensions());
+      
+      // Reset initial render flags to force redraw on resize
+      isInitialRenderRef.current = {
+        hours: true,
+        minutes: true,
+        seconds: true,
+        days: true
+      };
+    };
+    
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-        if (timeDiff <= 0) {
-          // Event has started
-          setTimeRemaining({
-            days: 0,
-            hours: '00',
-            minutes: '00',
-            seconds: '00',
-            isLessThanDay: true
-          });
-          return;
-        }
+ // Update countdown timer
+useEffect(() => {
+  const updateCountdown = () => {
+    try {
+      const startDate = new Date(scheduleData.startDate);
+      
+      // Get current date in IST (UTC+5:30)
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const istOffset = 5.5 * 60 * 60000; // 5 hours and 30 minutes in milliseconds
+      const currentDate = new Date(utc + istOffset);
+      
+      const timeDiff = startDate - currentDate;
 
-        const days = Math.floor(timeDiff / (1000 * 3600 * 24));
-        const hours = String(Math.floor((timeDiff / (1000 * 3600)) % 24)).padStart(2, '0');
-        const minutes = String(Math.floor((timeDiff / (1000 * 60)) % 60)).padStart(2, '0');
-        const seconds = String(Math.floor((timeDiff / 1000) % 60)).padStart(2, '0');
-        
+      if (timeDiff <= 0) {
+        // Event has started
         setTimeRemaining({
-          days,
-          hours,
-          minutes,
-          seconds,
-          isLessThanDay: days < 1
-        });
-      } catch (error) {
-        console.error('Error calculating time difference:', error);
-        setTimeRemaining({
-          days: 40,
+          days: 0,
           hours: '00',
           minutes: '00',
           seconds: '00',
-          isLessThanDay: false
+          isLessThanDay: true
         });
+        return;
       }
-    };
 
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
+      const days = Math.floor(timeDiff / (1000 * 3600 * 24));
+      const hours = String(Math.floor((timeDiff / (1000 * 3600)) % 24)).padStart(2, '0');
+      const minutes = String(Math.floor((timeDiff / (1000 * 60)) % 60)).padStart(2, '0');
+      const seconds = String(Math.floor((timeDiff / 1000) % 60)).padStart(2, '0');
+      
+      setTimeRemaining({
+        days,
+        hours,
+        minutes,
+        seconds,
+        isLessThanDay: days < 1
+      });
+    } catch (error) {
+      console.error('Error calculating time difference:', error);
+      setTimeRemaining({
+        days: 40,
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+        isLessThanDay: false
+      });
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  updateCountdown();
+  const interval = setInterval(updateCountdown, 1000);
+
+  return () => clearInterval(interval);
+}, []);
 
   // Setup canvas and animation for each time unit
   const setupCanvas = (canvasRef, dotsCanvasRef, containerId, dotsRef) => {
@@ -119,8 +161,8 @@ const Countdown = () => {
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = canvasDimensions.width;
+    canvas.height = canvasDimensions.height;
     
     const dotsCanvas = dotsCanvasRef.current;
     const dotsCtx = dotsCanvas.getContext('2d');
@@ -133,10 +175,9 @@ const Countdown = () => {
     
     // Clear existing dots
     dotsRef.current = [];
-    
-    // Create dots
     const randomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
-    const dotCount = Math.floor((dotsCanvas.width * dotsCanvas.height) / 500);
+    const dotDensity = isMobile ? 400 : 500; 
+    const dotCount = Math.floor((dotsCanvas.width * dotsCanvas.height) / dotDensity);
     
     for (let i = 0; i < dotCount; i++) {
       dotsRef.current.push({
@@ -158,31 +199,43 @@ const Countdown = () => {
       ctx,
       dotsCanvas,
       dotsCtx,
-      offsetX: (dotsCanvas.width - canvasWidth) / 2,
-      offsetY: (dotsCanvas.height - canvasHeight) / 2
+      offsetX: (dotsCanvas.width - canvasDimensions.width) / 2,
+      offsetY: (dotsCanvas.height - canvasDimensions.height) / 2
     };
   };
 
   // Draw number and get pixel coordinates
   const drawNumber = (ctx, text, pixelCoordinatesRef) => {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.clearRect(0, 0, canvasDimensions.width, canvasDimensions.height);
     ctx.fillStyle = "rgba(36, 40, 47, 0)";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillRect(0, 0, canvasDimensions.width, canvasDimensions.height);
     
     ctx.fillStyle = "rgba(13, 13, 26, 0.1)";
     ctx.textAlign = 'center';
-    ctx.font = "bold 200px Lato";
-    ctx.fillText(text, canvasWidth / 2, canvasHeight / 2 + 30);
     
-    const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight).data;
+    // Responsive font size
+    const fontSize = isMobile ? 80 : 120;
+    ctx.font = `bold ${fontSize}px Lato`;
+    
+    // Adjust vertical positioning
+    const verticalPosition = isMobile ? 
+        canvasDimensions.height / 2 + 20 : 
+        canvasDimensions.height / 2 + 30;
+    
+    ctx.fillText(text, canvasDimensions.width / 2, verticalPosition);
+    
+    const imageData = ctx.getImageData(0, 0, canvasDimensions.width, canvasDimensions.height).data;
     pixelCoordinatesRef.current = [];
+    
+    // Adjust pixel sampling based on screen size
+    const sampleRate = isMobile ? (circleRadius * 2 + 2) : (circleRadius * 2 + 3);
     
     for (let i = 0; i < imageData.length; i += 4) {
       if (imageData[i] !== 0) {
-        const x = (i / 4) % canvasWidth;
-        const y = Math.floor(i / 4 / canvasWidth);
+        const x = (i / 4) % canvasDimensions.width;
+        const y = Math.floor(i / 4 / canvasDimensions.width);
         
-        if ((x % (circleRadius * 2 + 3) === 0) && (y % (circleRadius * 2 + 3) === 0)) {
+        if ((x % sampleRate === 0) && (y % sampleRate === 0)) {
           pixelCoordinatesRef.current.push({ x, y });
         }
       }
@@ -202,11 +255,16 @@ const Countdown = () => {
     const tweenDot = (dot, pos, canvasWidth, canvasHeight) => {
       dot.tween?.kill();
       
+      // Adjust animation speed for mobile
+      const duration = isMobile ? 
+        (pos ? 0.7 + Math.random() * 0.3 : 1.5 + Math.random() * 0.5) : 
+        (pos ? 1 + Math.random() * 0.5 : 2 + Math.random() * 1);
+      
       dot.tween = gsap.to(dot, {
         x: pos ? pos.x + offsetX : randomNumber(0, canvasWidth),
         y: pos ? pos.y + offsetY : randomNumber(0, canvasHeight),
         alpha: pos ? 1 : 0.3,
-        duration: pos ? 1 + Math.random() * 0.5 : 2 + Math.random() * 1,
+        duration: duration,
         ease: "power2.out"
       });
       
@@ -215,12 +273,12 @@ const Countdown = () => {
     
     // Animate dots to form the number
     for (let i = 0; i < limit; i++) {
-      tweenDot(dotsRef.current[i], pixelCoordinatesRef.current[i], offsetX * 2 + canvasWidth, offsetY * 2 + canvasHeight);
+      tweenDot(dotsRef.current[i], pixelCoordinatesRef.current[i], offsetX * 2 + canvasDimensions.width, offsetY * 2 + canvasDimensions.height);
     }
     
     // Move remaining dots randomly
     for (let j = limit; j < dotsRef.current.length; j++) {
-      tweenDot(dotsRef.current[j], null, offsetX * 2 + canvasWidth, offsetY * 2 + canvasHeight);
+      tweenDot(dotsRef.current[j], null, offsetX * 2 + canvasDimensions.width, offsetY * 2 + canvasDimensions.height);
     }
   };
 
@@ -261,7 +319,7 @@ const Countdown = () => {
       }
       tweenAnimationsRefs.current.days.forEach(tween => tween?.kill());
     };
-  }, [timeRemaining.days, timeRemaining.isLessThanDay]);
+  }, [timeRemaining.days, timeRemaining.isLessThanDay, canvasDimensions, isMobile]);
 
   // Effect for hours display
   useEffect(() => {
@@ -289,7 +347,7 @@ const Countdown = () => {
       }
       tweenAnimationsRefs.current.hours.forEach(tween => tween?.kill());
     };
-  }, [timeRemaining.hours, timeRemaining.isLessThanDay]);
+  }, [timeRemaining.hours, timeRemaining.isLessThanDay, canvasDimensions, isMobile]);
 
   // Effect for minutes display
   useEffect(() => {
@@ -317,7 +375,7 @@ const Countdown = () => {
       }
       tweenAnimationsRefs.current.minutes.forEach(tween => tween?.kill());
     };
-  }, [timeRemaining.minutes, timeRemaining.isLessThanDay]);
+  }, [timeRemaining.minutes, timeRemaining.isLessThanDay, canvasDimensions, isMobile]);
 
   // Effect for seconds display
   useEffect(() => {
@@ -345,7 +403,7 @@ const Countdown = () => {
       }
       tweenAnimationsRefs.current.seconds.forEach(tween => tween?.kill());
     };
-  }, [timeRemaining.seconds, timeRemaining.isLessThanDay]);
+  }, [timeRemaining.seconds, timeRemaining.isLessThanDay, canvasDimensions, isMobile]);
 
   // Cleanup all animations on component unmount
   useEffect(() => {
@@ -366,33 +424,36 @@ const Countdown = () => {
         <div className="mb-6 pt-10 text-center">
           {timeRemaining.isLessThanDay ? (
             // Display HH:MM:SS format when less than a day remains
-            <div className="flex justify-center items-center">
+            <div className={`flex flex-col md:flex-row justify-center items-center`}>
               {/* Hours */}
-              <div id="hours-container" className="relative h-48 w-full max-w-xs">
+              <div id="hours-container" className="relative h-32 md:h-48 w-full max-w-xs">
                 <canvas ref={hoursCanvasRef} className="absolute top-0 left-0 z-20"></canvas>
                 <canvas ref={hoursDotsCanvasRef} className="absolute top-0 left-0 z-30"></canvas>
+                <div className="absolute bottom-0 left-0 w-full text-center text-sm font-medium">HOURS</div>
               </div>
               
-              {/* Separator */}
-              <div className="mx-1 flex items-center">
+              {/* Separator - Mobile: Show colon at right side of hour unit */}
+              <div className="md:mx-1 md:flex md:items-center hidden md:block">
                 <div className="text-4xl font-bold">:</div>
               </div>
               
               {/* Minutes */}
-              <div id="minutes-container" className="relative h-48 w-full max-w-xs">
+              <div id="minutes-container" className="relative h-32 md:h-48 w-full max-w-xs">
                 <canvas ref={minutesCanvasRef} className="absolute top-0 left-0 z-20"></canvas>
                 <canvas ref={minutesDotsCanvasRef} className="absolute top-0 left-0 z-30"></canvas>
+                <div className="absolute bottom-0 left-0 w-full text-center text-sm font-medium">MINUTES</div>
               </div>
               
-              {/* Separator */}
-              <div className="mx-1 flex items-center">
+              {/* Separator - Mobile: Show colon at right side of minute unit */}
+              <div className="md:mx-1 md:flex md:items-center hidden md:block">
                 <div className="text-4xl font-bold">:</div>
               </div>
               
               {/* Seconds */}
-              <div id="seconds-container" className="relative h-48 w-full max-w-xs">
+              <div id="seconds-container" className="relative h-32 md:h-48 w-full max-w-xs">
                 <canvas ref={secondsCanvasRef} className="absolute top-0 left-0 z-20"></canvas>
                 <canvas ref={secondsDotsCanvasRef} className="absolute top-0 left-0 z-30"></canvas>
+                <div className="absolute bottom-0 left-0 w-full text-center text-sm font-medium">SECONDS</div>
               </div>
             </div>
           ) : (
@@ -401,6 +462,7 @@ const Countdown = () => {
               <div id="days-container" className="relative h-48 w-full max-w-md">
                 <canvas ref={daysCanvasRef} className="absolute top-0 left-0 z-20"></canvas>
                 <canvas ref={daysDotsCanvasRef} className="absolute top-0 left-0 z-30"></canvas>
+                <div className="absolute bottom-0 left-0 w-full text-center text-sm font-medium">DAYS REMAINING</div>
               </div>
             </div>
           )}
