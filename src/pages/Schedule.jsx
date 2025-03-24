@@ -130,7 +130,7 @@ const Schedule = () => {
   return (
     <div className="min-h-screen bg-[#121220] text-white">
       {/* Header */}
-      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 relative overflow-hidden">
+      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 relative overflow-hidden px-4 sm:px-6 lg:px-12">
         {/* Abstract shapes in the background */}
         <div className="absolute inset-0 overflow-hidden opacity-20">
           <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#E056C1] blur-3xl"></div>
@@ -156,7 +156,7 @@ const Schedule = () => {
       </section>
 
       {/* Filter Bar */}
-      <div className="sticky top-0 z-20 bg-[#1A1A2E] border-b border-[#2A2A3A] shadow-lg">
+      <div className="sticky top-0 z-20 bg-[#1A1A2E] border-b border-[#2A2A3A] shadow-lg px-4 sm:px-6 lg:px-12">
         <div className="container mx-auto px-4">
           <div className="py-4 flex items-center overflow-x-auto scrollbar-hide">
             <span className="text-white/70 mr-3 text-sm">Filter by:</span>
@@ -178,7 +178,7 @@ const Schedule = () => {
       </div>
 
       {/* Schedule Timeline */}
-      <section className="py-8 px-4">
+      <section className="py-8 px-4 sm:px-6 lg:px-12">
         <div className="container mx-auto max-w-4xl">
           {Object.keys(filteredGroupedEvents).length > 0 ? (
             Object.entries(filteredGroupedEvents).map(([day, events]) => (

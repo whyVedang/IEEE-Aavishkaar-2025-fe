@@ -29,7 +29,7 @@ const Contact = () => {
   return (
     <>
       {/* Header */}
-      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16">
+      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 px-4 sm:px-6 lg:px-12">
         <div className="container mx-auto px-4">
           <Link
             to="/"

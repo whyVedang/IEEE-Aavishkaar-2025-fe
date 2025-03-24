@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, User, Mail, Phone, UserCheck, Users, Trophy } from "lucide-react";
+import { Send, User, Mail, Phone, UserCheck, Users, Trophy, Plus, X } from "lucide-react";
 import styles from "./AddTeamForm.module.css";  
 import { useParams } from "react-router";
 import axios from "axios";
@@ -242,10 +242,11 @@ const AddTeamForm = () => {
                 <button
                   type="button"
                   onClick={addMember}
-                  className={`${styles.btnSuccess} ${formData.members.length >= 4 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`${styles.btnSuccess} ${formData.members.length >= 4 ? 'opacity-50 cursor-not-allowed' : ''} 
+                  px-4 py-2 rounded-md cursor-pointer flex items-center justify-center gap-2`}
                   disabled={formData.members.length >= 4}
                 >
-                  Add Member
+                  <Plus/> Add Member
                 </button>
               </div>
 
@@ -260,9 +261,9 @@ const AddTeamForm = () => {
                         <button
                           type="button"
                           onClick={() => removeMember(index)}
-                          className={styles.btnDanger}
+                          className={`${styles.btnDanger} px-4 py-2 rounded-md cursor-pointer flex items-center justify-center gap-2`}
                         >
-                          Remove
+                          <X/> Remove
                         </button>
                       )}
                     </div>

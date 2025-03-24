@@ -37,7 +37,7 @@ const Preloader = ({setLoading}) => {
   }, [setLoading]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-black">
+    <div className="fixed top-0 left-0 z-[999] flex flex-col items-center justify-center w-full h-screen overflow-hidden bg-black">
       {/* Background grid */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNDB2NDBoLTQweiIvPjxwYXRoIGQ9Ik0wIDBoMXY0MGgtMXoiIGZpbGw9IiMzMzMiIG9wYWNpdHk9Ii4zIi8+PHBhdGggZD0iTTAgMHY0MGg0MHYtNDB6TTM5IDFoLTM4djM4aDM4eiIgZmlsbD0iIzMzMyIgb3BhY2l0eT0iLjMiLz48L2c+PC9zdmc+')] opacity-20" />
 
@@ -63,7 +63,7 @@ const Preloader = ({setLoading}) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }} // Restored original timing
         >
-          <h1 className="text-5xl font-bold tracking-wider text-violet-500">
+          <h1 className="text-xl md:text-5xl font-bold tracking-wider text-violet-500">
             <motion.span
               animate={{
                 textShadow: ['0 0 5px #8b5cf6', '0 0 15px #8b5cf6', '0 0 5px #8b5cf6']

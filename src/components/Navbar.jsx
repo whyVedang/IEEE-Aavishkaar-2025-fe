@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import {
   Menu,
@@ -14,6 +14,7 @@ import navItems from "../configs/nav.json";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Mapping navItem icon from string to corresponding icon component
   const getIcon = (iconName) => {
@@ -35,14 +36,34 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      // Change state when scrolled more than 100 pixels
+      setIsScrolled(window.scrollY > 100);
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="fixed w-full z-50 bg-transparent bg-opacity-30 backdrop-blur-lg backdrop-filter firefox:bg-opacity-30">
+    <nav className={`
+      w-full z-50 transition-all duration-300 bg-transparent
+      ${isScrolled 
+        ? 'fixed bg-opacity-30 backdrop-blur-lg backdrop-filter firefox:bg-opacity-30' 
+        : 'absolute'
+      }
+    `}>
       <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-12">
         {/* Logo Section */}
         <Link to={"/"} className="flex items-center cursor-pointer">
-          <img src="/logo.jpg" alt="Description" className="w-10 h-auto" />
           <span className="font-orbitron font-bold text-xl ml-2">
-            RIT-B TechFest
+            RIT TechFest
           </span>
         </Link>
 
@@ -74,7 +95,14 @@ const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       {isOpen && (
-        <div className="md:hidden bg-transparent bg-opacity-30 backdrop-blur-lg backdrop-filter firefox:bg-opacity-30 border-t border-[#2E1E8A]">
+        <div className={`
+          md:hidden 
+          ${isScrolled 
+            ? 'bg-white/30 backdrop-blur-lg shadow-lg' 
+            : 'bg-transparent'
+          } 
+          border-t border-[#2E1E8A]
+        `}>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link

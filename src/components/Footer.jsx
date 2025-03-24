@@ -38,7 +38,7 @@ const Footer = () => {
 
   return (
     <footer className="mt-10 relative bg-[#0c0c18] border-t border-neon-pink/30 transition-footer">
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative py-12 px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
           <div className="space-y-4">
             <Link
@@ -94,19 +94,17 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="font-orbitron text-lg font-bold mb-4">
-              Contact Us
-            </h3>
+            <h3 className="font-orbitron text-lg font-bold mb-4">Contact Us</h3>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2 justify-center md:justify-start">
-                <Mail className="w-4 h-4 text-neon-pink" />
-                <span className="text-gray-300">
-                  <a href="mailto:ieee-ritb@gmail.com">{ieeeData.email}</a>
+                <Mail className="w-4 h-4 text-neon-pink flex-shrink-0" />
+                <span className="text-gray-300 text-sm md:text-sm">
+                  <a href={`mailto:${ieeeData.email}`}>{ieeeData.email}</a>
                 </span>
               </li>
               <li className="flex items-center space-x-2 justify-center md:justify-start">
-                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-hacker-green" />
-                <span className="text-gray-300">
+                <MapPin className="w-4 h-4 text-hacker-green flex-shrink-0" />
+                <span className="text-gray-300 text-sm md:text-sm">
                   <a href="https://maps.app.goo.gl/fkGesiVRNP8qBArJ9">
                     {ieeeData.address}
                   </a>
@@ -115,9 +113,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="font-orbitron text-lg font-bold mb-4">
-              Follow Us
-            </h3>
+            <h3 className="font-orbitron text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex space-x-4 justify-center md:justify-start">
               <a
                 href={ieeeData.socials.linkedin}

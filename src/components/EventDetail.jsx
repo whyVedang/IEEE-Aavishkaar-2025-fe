@@ -28,35 +28,36 @@ const EventDetail = () => {
   const [expandedFaqs, setExpandedFaqs] = useState([]);
 
   const toggleFaq = (index) => {
-    setExpandedFaqs(prevExpandedFaqs => 
-      prevExpandedFaqs.includes(index)
-        ? prevExpandedFaqs.filter(i => i !== index) // Remove if already expanded
-        : [...prevExpandedFaqs, index] // Add if not expanded
+    setExpandedFaqs(
+      (prevExpandedFaqs) =>
+        prevExpandedFaqs.includes(index)
+          ? prevExpandedFaqs.filter((i) => i !== index) // Remove if already expanded
+          : [...prevExpandedFaqs, index] // Add if not expanded
     );
   };
 
   const formatPrizes = (prizesArray) => {
     if (!Array.isArray(prizesArray)) return [];
-    
-    return prizesArray.map(prize => {
-      if (typeof prize === 'string') return prize;
-      
+
+    return prizesArray.map((prize) => {
+      if (typeof prize === "string") return prize;
+
       // Handle prize objects
       const position = prize.position;
       const amount = prize.amount;
-      
+
       // Add ordinal suffix to position
-      let suffix = 'th';
-      if (position % 10 === 1 && position % 100 !== 11) suffix = 'st';
-      else if (position % 10 === 2 && position % 100 !== 12) suffix = 'nd';
-      else if (position % 10 === 3 && position % 100 !== 13) suffix = 'rd';
-      
+      let suffix = "th";
+      if (position % 10 === 1 && position % 100 !== 11) suffix = "st";
+      else if (position % 10 === 2 && position % 100 !== 12) suffix = "nd";
+      else if (position % 10 === 3 && position % 100 !== 13) suffix = "rd";
+
       return `${position}${suffix} Place: ₹${amount.toLocaleString()}`;
     });
   };
 
   // Integrate the API fetching logic
-    useEffect(() => {
+  useEffect(() => {
     fetch(API_ENDPOINTS.EVENT_DETAIL(id))
       .then((response) => {
         if (!response.ok) {
@@ -65,24 +66,25 @@ const EventDetail = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Received event data from specific endpoint:", data);
-        
+        // console.log("Received event data from specific endpoint:", data);
+
         // Set both event and eventDetails
         setEvent(data);
-        
+
         // Merge API data with default data for eventDetails
         const defaultEventData = getEventDetails();
         setDefaultDetails(defaultEventData);
-        
+
         // Find the matching default event details using the event I
-        
+
         // Create the complete details by merging, prioritizing API data
         const completeDetails = {
           title: data.eventName || defaultEventData.title,
           description: data.eventDescription || defaultEventData.description,
           timeline: data.eventTimeline || defaultEventData.timeline,
           theme: data.eventTheme || defaultEventData.theme,
-          maxParticipants: data.maxParticipantsPerTeam || defaultEventData.maxParticipants,
+          maxParticipants:
+            data.maxParticipantsPerTeam || defaultEventData.maxParticipants,
           fees: data.registrationFees || defaultEventData.fees,
           organiser: data.organiser || defaultEventData.organiser,
           coordinators: data.coordinators || defaultEventData.coordinators,
@@ -93,29 +95,27 @@ const EventDetail = () => {
           duration: data.duration || defaultEventData.duration,
           location: data.eventVenue || defaultEventData.location,
           teamSize: data.maxParticipantsPerTeam || defaultEventData.teamSize,
-          longDescription: data.longDescription || defaultEventData.longDescription,
+          longDescription:
+            data.longDescription || defaultEventData.longDescription,
           prizes: data.prizes || defaultEventData.prizes,
           date: data.date
-          ? new Date(data.date).toLocaleDateString(
-              "en-US",
-              {
+            ? new Date(data.date).toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
                 hour12: true,
-              }
-            )
-          : "Date TBA",
+              })
+            : "Date TBA",
         };
-        
+
         setEventDetails(completeDetails);
-        console.log("Complete ", completeDetails);
-        
+        // console.log("Complete ", completeDetails);
+
         // Set specific state items if needed
         if (completeDetails.rules) setRules(completeDetails.rules);
         if (completeDetails.faqs) setFaqs(completeDetails.faqs);
-        
+
         setLoading(false);
       })
       .catch((error) => {
@@ -127,36 +127,35 @@ const EventDetail = () => {
   if (loading) {
     return (
       <main className="min-h-screen w-full bg-[#0D0D1A] text-white flex flex-col">
-        
         {/* Hero Section Skeleton */}
         <section className="relative">
           <div className="bg-[#1E1E2D] h-64 w-full"></div>
           <div className="relative container mx-auto px-4 py-16">
             <div className="h-6 w-32 bg-[#1E1E2D] rounded-md mb-6 animate-pulse"></div>
-            
+
             <div className="mt-8">
               <div className="h-8 w-24 bg-[#1E1E2D] rounded-full mb-4 animate-pulse"></div>
               <div className="h-12 w-3/4 bg-[#1E1E2D] rounded-md mb-4 animate-pulse"></div>
-              
+
               <div className="mt-6 flex flex-wrap items-center gap-6">
                 <div className="h-6 w-48 bg-[#1E1E2D] rounded-md animate-pulse"></div>
                 <div className="h-6 w-40 bg-[#1E1E2D] rounded-md animate-pulse"></div>
                 <div className="h-6 w-32 bg-[#1E1E2D] rounded-md animate-pulse"></div>
               </div>
-              
+
               <div className="mt-8 max-w-3xl">
                 <div className="h-6 w-full bg-[#1E1E2D] rounded-md mb-3 animate-pulse"></div>
                 <div className="h-6 w-full bg-[#1E1E2D] rounded-md mb-3 animate-pulse"></div>
                 <div className="h-6 w-2/3 bg-[#1E1E2D] rounded-md animate-pulse"></div>
               </div>
-              
+
               <div className="mt-8">
                 <div className="h-12 w-40 bg-[#1E1E2D] rounded-lg animate-pulse"></div>
               </div>
             </div>
           </div>
         </section>
-        
+
         {/* Content Sections Skeleton */}
         <section className="py-12 px-4">
           <div className="container mx-auto max-w-4xl lg:max-w-6xl xl:max-w-7xl">
@@ -171,7 +170,7 @@ const EventDetail = () => {
                 <div className="h-6 w-full bg-[#1E1E2D] rounded-md mb-3 animate-pulse"></div>
                 <div className="h-6 w-full bg-[#1E1E2D] rounded-md mb-3 animate-pulse"></div>
                 <div className="h-6 w-3/4 bg-[#1E1E2D] rounded-md animate-pulse"></div>
-                
+
                 <div className="mt-8">
                   <div className="h-7 w-24 bg-[#1E1E2D] rounded-md mb-4 animate-pulse"></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -182,7 +181,7 @@ const EventDetail = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Rules Skeleton */}
             <div className="mb-12">
               <div className="flex itemAres-center mb-6">
@@ -200,7 +199,7 @@ const EventDetail = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* FAQs Skeleton */}
             <div className="mb-12">
               <div className="flex items-center mb-6">
@@ -218,7 +217,7 @@ const EventDetail = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Coordinators Skeleton */}
             <div>
               <div className="flex items-center mb-6">
@@ -239,20 +238,20 @@ const EventDetail = () => {
             </div>
           </div>
         </section>
-        
+
         {/* Register Banner Skeleton */}
         <section className="py-12 px-4 bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] mt-12">
-      <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to participate?</h2>
-        <p className="text-white/80 max-w-2xl mx-auto mb-8">
-          Don't miss this opportunity to showcase your skills, learn from
-          peers, and win exciting prizes.
-        </p>
-        <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
-          Register for {event?.name || event?.eventName}
-        </button>
-      </div>
-    </section>
+          <div className="container mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to participate?</h2>
+            <p className="text-white/80 max-w-2xl mx-auto mb-8">
+              Don't miss this opportunity to showcase your skills, learn from
+              peers, and win exciting prizes.
+            </p>
+            <button className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+              Register for {event?.name || event?.eventName}
+            </button>
+          </div>
+        </section>
       </main>
     );
   }
@@ -280,10 +279,8 @@ const EventDetail = () => {
 
   return (
     <main className="min-h-screen w-full bg-[#0D0D1A] text-white flex flex-col">
-      <Navbar />
-
       {/* Hero Section */}
-      <section className="relative">
+      <section className="relative px-4 sm:px-6 lg:px-12">
         <div className="absolute inset-0 z-0">
           <img
             src={eventDetails?.img}
@@ -318,9 +315,7 @@ const EventDetail = () => {
             <div className="mt-6 flex flex-wrap items-center gap-6">
               <div className="flex items-center text-white/80">
                 <Clock className="h-5 w-5 mr-2" />
-                <span>
-                  {eventDetails.date}
-                </span>
+                <span>{eventDetails.date}</span>
               </div>
               <div className="flex items-center text-white/80">
                 <MapPin className="h-5 w-5 mr-2" />
@@ -339,7 +334,10 @@ const EventDetail = () => {
             </div>
 
             <div className="mt-8">
-              <Link to={`/${id}/teamregister`} className="px-8 py-4 bg-gradient-to-r from-[#E056C1] to-[#4F33B3] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+              <Link
+                to={`/${id}/teamregister`}
+                className="px-8 py-4 bg-gradient-to-r from-[#E056C1] to-[#4F33B3] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200"
+              >
                 Register Now
               </Link>
             </div>
@@ -349,7 +347,7 @@ const EventDetail = () => {
 
       {/* Tabs Section */}
       <section className="py-12 px-4">
-        <div className="container mx-auto max-w-4xl lg:max-w-6xl xl:max-w-7xl">
+        <div className="container px-4 sm:px-6 lg:px-12">
           {/* Event Details */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -369,17 +367,17 @@ const EventDetail = () => {
               </p>
 
               {eventDetails.prizes && (
-  <div className="mt-8">
-    <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
-      Prizes
-    </h3>
-    <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-      {formatPrizes(eventDetails.prizes).map((prize, index) => (
-        <li key={index}>{prize}</li>
-      ))}
-    </ul>
-  </div>
-)}
+                <div className="mt-8">
+                  <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
+                    Prizes
+                  </h3>
+                  <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
+                    {formatPrizes(eventDetails.prizes).map((prize, index) => (
+                      <li key={index}>{prize}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {eventDetails.timeline && (
                 <div className="mt-8">
@@ -447,34 +445,34 @@ const EventDetail = () => {
               Frequently Asked Questions
             </h2>
             <div className="bg-[#1E1E2D] rounded-xl border border-[#4F33B3]/30 divide-y divide-[#4F33B3]/20">
-  {faqs.map((faq, index) => (
-    <div 
-      key={index} 
-      className="p-4 md:p-6 cursor-pointer hover:bg-[#2A2A3D] transition-colors duration-200"
-      onClick={() => toggleFaq(index)}
-    >
-      <div className="w-full flex justify-between items-center">
-        <h3 className="text-lg font-medium text-left">
-          {faq.question}
-        </h3>
-        {expandedFaqs.includes(index) ? (
-          <ChevronUp className="h-5 w-5 text-[#E056C1]" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-[#E056C1]" />
-        )}
-      </div>
-      {expandedFaqs.includes(index) && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          className="mt-3 text-white/70"
-        >
-          <p>{faq.answer}</p>
-        </motion.div>
-      )}
-    </div>
-  ))}
-</div>
+              {faqs.map((faq, index) => (
+                <div
+                  key={index}
+                  className="p-4 md:p-6 cursor-pointer hover:bg-[#2A2A3D] transition-colors duration-200"
+                  onClick={() => toggleFaq(index)}
+                >
+                  <div className="w-full flex justify-between items-center">
+                    <h3 className="text-lg font-medium text-left">
+                      {faq.question}
+                    </h3>
+                    {expandedFaqs.includes(index) ? (
+                      <ChevronUp className="h-5 w-5 text-[#E056C1]" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-[#E056C1]" />
+                    )}
+                  </div>
+                  {expandedFaqs.includes(index) && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="mt-3 text-white/70"
+                    >
+                      <p>{faq.answer}</p>
+                    </motion.div>
+                  )}
+                </div>
+              ))}
+            </div>
           </motion.div>
 
           {/* Contact */}
@@ -514,7 +512,10 @@ const EventDetail = () => {
             Don't miss this opportunity to showcase your skills, learn from
             peers, and win exciting prizes.
           </p>
-          <Link to={`/${id}/teamregister`} className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200">
+          <Link
+            to={`/${id}/teamregister`}
+            className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200"
+          >
             Register for {event?.title}
           </Link>
         </div>
