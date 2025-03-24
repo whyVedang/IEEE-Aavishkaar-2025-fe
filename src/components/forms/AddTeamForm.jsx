@@ -4,9 +4,12 @@ import styles from "./AddTeamForm.module.css";
 import { useParams } from "react-router";
 import axios from "axios";
 import logo from "../../assets/logo.png";
+import { useNavigate } from "react-router";
+import { ToastContainer,toast } from "react-toastify";
 
 const AddTeamForm = () => {
   const {id}=useParams();
+  let navigate=useNavigate();
   const beUrl="https://aavishkaar2025-be.onrender.com/aavishkaar/teams/register";
   const [formData, setFormData] = useState({
     teamName: "",
@@ -24,17 +27,37 @@ const AddTeamForm = () => {
     ],
     event:id,
   });
-
+  // Toast Notification Function
+  const notify =  () => toast.success("Team Registered Successfully!", {
+    position: "top-center",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    theme: "light",
+  });
   const handleSubmit =async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(beUrl, formData);
+      await axios.post(beUrl, formData);
+      notify();
+      setTimeout(()=>navigate("/"),4000);
     } catch (e) {
       if (e.response) {
-        console.error("ServerError:", e.response.data);
+        console.error("ServerError:", e.response.data); 
       } else {
         console.error("RequestError:", e.message);
       }
+      toast.error("Registration Failed! Try again.",{
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: "light",
+      });
     }
 
   };
@@ -294,6 +317,7 @@ const AddTeamForm = () => {
           </form>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
