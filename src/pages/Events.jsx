@@ -14,7 +14,7 @@ const Events = () => {
     fetch(API_ENDPOINTS.EVENTS)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched events:", data);
+        // console.log("Fetched events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
           title: event.eventName,
@@ -35,7 +35,7 @@ const Events = () => {
           location: event.eventVenue || "TBA",
           img: event.img||  eventImages[event.eventTheme] || eventImages.Robotics,
         }));
-        console.log("Transformed events:", transformedEvents);
+        // console.log("Transformed events:", transformedEvents);
         setEvents(transformedEvents);
         setLoading(false);
       })
@@ -76,8 +76,8 @@ const Events = () => {
   return (
     <>
       {/* Header */}
-      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 px-4 sm:px-6 lg:px-12">
+        <div className="container mx-auto">
           <Link
             to="/"
             className="inline-flex items-center text-white/80 hover:text-white transition-colors mb-6 mt-4"
@@ -95,7 +95,7 @@ const Events = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="py-8 px-4">
+      <section className="py-8 px-4 sm:px-6 lg:px-12">
         <div className="container mx-auto">
           <div className="flex flex-wrap gap-3 justify-center">
             {eventCategories.map((category) => (
@@ -116,7 +116,7 @@ const Events = () => {
       </section>
 
       {/* Events Grid */}
-      <section className="py-8 px-4 flex-1">
+      <section className="py-8 px-4 sm:px-6 lg:px-12 flex-1">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEvents.map((event) => (

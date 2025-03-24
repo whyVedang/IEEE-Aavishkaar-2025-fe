@@ -97,7 +97,7 @@ const Team = () => {
   return (
     <>
       {/* Header */}
-      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16">
+      <section className="bg-gradient-to-r from-[#2E1E8A] to-[#4F33B3] py-16 px-4 sm:px-6 lg:px-12">
         <div className="container mx-auto px-4">
           <Link
             to="/"
@@ -116,7 +116,7 @@ const Team = () => {
       </section>
 
       {/* Team Grid */}
-      <section className="py-8 px-4 flex-1">
+      <section className="py-8 px-4 sm:px-6 lg:px-12 flex-1">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, index) => (

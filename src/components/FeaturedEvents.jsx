@@ -13,27 +13,25 @@ const FeaturedEvents = () => {
 
   // Add data fetching effect
   useEffect(() => {
-    fetch(API_ENDPOINTS.EVENTS)
+    fetch(API_ENDPOINTS.FEATURED_EVENTS)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched events:", data);
+        // console.log("Fetched events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
-          img: event.img || eventImages[event.eventTheme] || eventImages.Robotics,
+          img:
+            event.img || eventImages[event.eventTheme] || eventImages.Robotics,
           title: event.eventName,
           category: event.eventTheme,
           description: event.eventDescription,
           date: event.date
-            ? new Date(event.date).toLocaleDateString(
-                "en-US",
-                {
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                }
-              )
+            ? new Date(event.date).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })
             : "Date TBA",
           venue: event.eventVenue || "TBA",
           organiser: event.organiser ? event.organiser : "",
@@ -51,7 +49,10 @@ const FeaturedEvents = () => {
   // Add loading state
   if (loading) {
     return (
-      <section id="featured" className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]">
+      <section
+        id="featured"
+        className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]"
+      >
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E056C1]"></div>
         </div>
@@ -62,14 +63,14 @@ const FeaturedEvents = () => {
   // Add error state
   if (error) {
     return (
-      <section id="featured" className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]">
+      <section
+        id="featured"
+        className="px-8 md:px-16 lg:px-24 py-8 bg-[#0c0c18]"
+      >
         <div className="text-center text-red-500">{error}</div>
       </section>
     );
   }
-
-  // Get the first 4 events as featured
-  const featuredEvents = events.filter(event => event.organiser === "SB");
 
   // Your existing render code remains the same, but use featuredEvents from API
   return (
@@ -81,13 +82,12 @@ const FeaturedEvents = () => {
       </div>
 
       <div className="flex justify-center">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl">
-          {/* Event Cards */}
-          {featuredEvents.map((event) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => (
             <Link
               to={`/events/${event.id}`}
               key={event.id}
-              className="overflow-hidden rounded-lg bg-[#1e1e2d] hover:shadow-lg hover:shadow-[#4F33B3]/30 transition-all duration-300"
+              className="w-full overflow-hidden rounded-lg bg-[#1e1e2d] hover:shadow-lg hover:shadow-[#4F33B3]/30 transition-all duration-300"
             >
               <div className="relative">
                 {/* Category Tag */}
@@ -109,11 +109,15 @@ const FeaturedEvents = () => {
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-lg font-bold text-white">{event.title}</h3>
+                <h3 className="text-lg font-bold text-white">
+                  {event.title}
+                </h3>
                 <div className="mt-2 text-sm font-medium text-white/80">
                   {event.date}
                 </div>
-                <div className="mt-1 text-sm text-white/70">{event.venue}</div>
+                <div className="mt-1 text-sm text-white/70">
+                  {event.venue}
+                </div>
                 <p className="mt-3 text-sm text-white/60 line-clamp-3">
                   {event.description}
                 </p>
@@ -135,6 +139,5 @@ const FeaturedEvents = () => {
     </section>
   );
 };
-
 
 export default FeaturedEvents;
