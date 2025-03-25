@@ -45,6 +45,9 @@ const RegistrationSuccess = () => {
           <Users className="mr-3 group-hover:animate-pulse" size={24} />
           Join WhatsApp Group
         </button>
+        <p className="text-white mb-6 mt-10">
+        Please check your spam folder in case you don't see the confirmation email in your inbox.
+        </p>
       </div>
     </div>
   );
