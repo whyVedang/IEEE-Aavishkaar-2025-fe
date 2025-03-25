@@ -119,9 +119,6 @@ const Events = () => {
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="px-3 py-1 bg-[#E056C1] rounded-full text-xs font-medium">
-                      {event.category}
-                    </span>
                   </div>
                 </div>
                 <div className="p-4">
