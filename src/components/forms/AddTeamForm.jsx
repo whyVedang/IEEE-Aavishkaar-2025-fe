@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Send, User, Mail, Phone, UserCheck, Users, Trophy, Plus, X } from "lucide-react";
 import styles from "./AddTeamForm.module.css";  
 import { useParams } from "react-router";
@@ -8,7 +8,11 @@ import { useNavigate } from "react-router";
 import { ToastContainer,toast } from "react-toastify";
 
 const AddTeamForm = () => {
+  const [eventData,setEventData] = useState({});
   const {id}=useParams();
+  // useEffect(()=>{
+  //    fetch(API_ENDPOINTS.EVENT_DETAIL(id))
+  // })
   let navigate=useNavigate();
   const beUrl="https://aavishkaar2025-be.onrender.com/aavishkaar/teams/register";
   const [formData, setFormData] = useState({
@@ -27,6 +31,17 @@ const AddTeamForm = () => {
     ],
     event:id,
   });
+
+  async function fetchInfo() {
+    const fetchUrl=`https://vw156683-8006.inc1.devtunnels.ms/aavishkaar/eventId/${id}`;
+    let event_data = await axios.get(fetchUrl);
+    console.log("fetched", event_data.data)
+    setEventData(event_data.data)
+  }
+
+  useEffect(() => {
+    fetchInfo()
+  },[])
   // Toast Notification Function
   const notify =  () => toast.success("Team Registered Successfully! Page will redirect to Whatsapp Link ", {
     position: "top-center",
@@ -43,23 +58,33 @@ const AddTeamForm = () => {
       await axios.post(beUrl, formData);
       notify();
       // setTimeout(()=>navigate("https://chat.whatsapp.com/L43AtjqvFUcIAM1BckgPfn"),4000);
-      setTimeout(() => window.open("https://chat.whatsapp.com/L43AtjqvFUcIAM1BckgPfn", "_blank"), 4000);
+      setTimeout(() => navigate(`/acknowledgement/${id}`), 4000);
 
     } catch (e) {
       if (e.response) {
-        console.error("ServerError:", e.response.data); 
+        console.error("ServerError:", e.response.data.message); 
+        toast.error(`Registration Failed! ${e.response.data.message}`,{
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "light",
+        });
       } else {
         console.error("RequestError:", e.message);
+        toast.error(`Registration Failed! ${e.message}`,{
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "light",
+        });
       }
-      toast.error("Registration Failed! Try again.",{
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        theme: "light",
-      });
+      
     }
 
   };
@@ -96,7 +121,9 @@ const AddTeamForm = () => {
   };
 
   const addMember = () => {
-    if (formData.members.length < 3) {
+    console.log(eventData.maxParticipantsPerTeam)
+    console.log(formData.members.length)
+    if (formData.members.length < 3 && formData.members.length <= eventData.maxParticipantsPerTeam - 2) {
       setFormData((prevState) => ({
         ...prevState,
         members: [...prevState.members, { name: "", usn: "" }],
@@ -313,10 +340,45 @@ const AddTeamForm = () => {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className={styles.btnPrimary}>
-              <span>Submit Registration</span>
-              <Send className="w-5 h-5" />
-            </button>
+            <button 
+          type="submit" 
+          className={`
+            ${styles.btnPrimary} 
+            flex items-center justify-center 
+            w-full 
+            py-3 
+            rounded-lg 
+            text-white 
+            font-bold 
+            transition-all 
+            duration-300 
+            ease-in-out 
+            transform 
+            hover:scale-105 
+            active:scale-95 
+            hover:shadow-lg 
+            hover:bg-gradient-to-r 
+            from-purple-500 
+            to-pink-500 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-purple-500 
+            focus:ring-opacity-50 
+            group
+          `}
+        >
+          <span className="mr-3">Submit Registration</span>
+          <Send 
+            className="
+              w-5 
+              h-5 
+              transition-transform 
+              duration-300 
+              group-hover:rotate-12 
+              group-hover:text-white
+            " 
+          />
+        </button>
           </form>
         </div>
       </div>
