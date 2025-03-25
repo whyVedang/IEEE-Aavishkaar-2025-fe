@@ -36,13 +36,13 @@
       "time": "10:00 AM - 02:00 PM",
       "date": "March 28, 2025",
       "title": "Network Strategies",
-      "location": "LHC 507"
+      "location": "ESB Seminar Hall 2"
     },
     {
       "time": "10:00 AM - 01:00 PM",
       "date": "March 28, 2025",
       "title": "Zenith",
-      "location": "R1, R3: ESB 217, 218; R3: CAD Lab"
+      "location": "R1, R3 ESB 217, R3 CAD LAB ESB 218"
     },
     {
       "time": "01:00 PM - 04:00 PM",
@@ -55,7 +55,7 @@
       "time": "01:00 PM - 03:00 PM",
       "date": "March 28, 2025",
       "title": "Mutant Madness",
-      "location": "ESB 530"
+      "location": "ESB 530
     },
     {
       "time": "01:00 PM - 03:00 PM",
@@ -64,7 +64,7 @@
       "location": "DES High Tech Seminar"
     },
     {
-      "time": "02:00 PM - 05:00 PM",
+      "time": "01:00 PM - 04:00 PM",
       "date": "March 28, 2025",
       "title": "Technovision",
       "location": "ESB 329, 330"
@@ -79,7 +79,7 @@
       "time": "01:00 PM - 04:00 PM",
       "date": "March 28, 2025",
       "title": "Tug of War",
-      "location": "R1: LHC Seminar Hall 1 (CS Lab-2)"
+      "location": "R1: LHC Seminar Hall 1 (CS Lab-1)"
     },
     {
       "time": "09:00 AM - 01:00 PM",
@@ -109,7 +109,7 @@
       "time": "09:00 AM - 12:00 PM",
       "date": "March 29, 2025",
       "title": "Shark Tank",
-      "location": "ESB Seminar Hall 2"
+      "location": "LHC Seminar Hall Big"
     },
     {
       "time": "09:00 AM - 01:00 PM",
@@ -121,7 +121,7 @@
       "time": "09:00 AM - 01:00 PM",
       "date": "March 29, 2025",
       "title": "SensorBot",
-      "location": "ESB 216, 217 Classrooms"
+      "location": "ESB 217,218"
     },
     {
       "time": "02:00 PM - 04:00 PM",
@@ -133,7 +133,7 @@
       "time": "01:00 PM - 04:00 PM",
       "date": "March 29, 2025",
       "title": "BrainStorm",
-      "location": "DES High Tech Seminar"
+      "location": "DES HIGH-TECH SEMINAR HALL"
     },
     {
       "time": "01:00 PM - 04:00 PM",
