@@ -23,7 +23,6 @@ const FeaturedEvents = () => {
           img:
             event.img || eventImages[event.eventTheme] || eventImages.Robotics,
           title: event.eventName,
-          category: event.eventTheme,
           description: event.eventDescription,
           date: event.eventDate,
           venue: event.eventVenue || "TBA",
@@ -85,9 +84,6 @@ const FeaturedEvents = () => {
               <div className="relative">
                 {/* Category Tag */}
                 <div className="absolute top-2 left-2 z-10">
-                  <span className="px-3 py-1 text-xs font-medium bg-[#ff3e9d] text-white rounded-full">
-                    {event.category}
-                  </span>
                 </div>
 
                 {/* Image */}
