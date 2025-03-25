@@ -8,13 +8,12 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // const [activeCategory, setActiveCategory] = useState("All");
   const [selectedDate,setSelectedDate]=useState("All");
   useEffect(() => {
     fetch(API_ENDPOINTS.EVENTS)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("Fetched events:", data);
+        console.log("Fetched events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
           slug: event.slug,
