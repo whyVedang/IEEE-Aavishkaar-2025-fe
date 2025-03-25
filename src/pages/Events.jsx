@@ -8,31 +8,19 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeCategory, setActiveCategory] = useState("All");
-
+  const [selectedDate,setSelectedDate]=useState("All");
   useEffect(() => {
     fetch(API_ENDPOINTS.EVENTS)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("Fetched events:", data);
+        console.log("Fetched events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
           slug: event.slug,
           title: event.eventName,
           category: event.eventTheme,
           description: event.eventDescription,
-          date: event.date
-            ? new Date(event.date).toLocaleDateString(
-                "en-US",
-                {
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                }
-              )
-            : "Date TBA",
+          date: event.date||"Date TBA",
           location: event.eventVenue || "TBA",
           img: event.img||  eventImages[event.eventTheme] || eventImages.Robotics,
         }));
@@ -53,11 +41,14 @@ const Events = () => {
     ...new Set(events.map((event) => event.category)),
   ];
 
-  const filteredEvents =
-    activeCategory === "All"
-      ? events
-      : events.filter((event) => event.category === activeCategory);
-
+  const filteredEvents = events.filter((event) => {
+    return (
+      selectedDate === "All" ||
+      (selectedDate === "Day 1" && event.date === "28 MARCH 2025") ||
+      (selectedDate === "Day 2" && event.date === "29 MARCH 2025")
+    );
+  });
+  
   if (loading) {
     return (
       <section className="bg-[#0c0c18] min-h-screen flex items-center justify-center">
@@ -96,26 +87,21 @@ const Events = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="py-8 px-4 sm:px-6 lg:px-12">
-        <div className="container mx-auto">
-          <div className="flex flex-wrap gap-3 justify-center">
-            {eventCategories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeCategory === category
-                    ? "bg-[#E056C1] text-white"
-                    : "bg-[#1E1E2D] text-white/70 hover:bg-[#2E1E8A] hover:text-white"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+      <section className="py-8 px-4">
+        <div className="container mx-auto flex flex-wrap gap-3 justify-center">
+          {["All", "Day 1", "Day 2"].map((date) => (
+            <button
+              key={date}
+              onClick={() => setSelectedDate(date)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedDate === date ? "bg-[#E056C1] text-white" : "bg-[#1E1E2D] text-white/70 hover:bg-[#2E1E8A] hover:text-white"
+              }`}
+            >
+              {date}
+            </button>
+          ))}
         </div>
       </section>
-
       {/* Events Grid */}
       <section className="py-8 px-4 sm:px-6 lg:px-12 flex-1">
         <div className="container mx-auto">

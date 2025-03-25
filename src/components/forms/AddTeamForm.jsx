@@ -28,7 +28,7 @@ const AddTeamForm = () => {
     event:id,
   });
   // Toast Notification Function
-  const notify =  () => toast.success("Team Registered Successfully!", {
+  const notify =  () => toast.success("Team Registered Successfully! Page will redirect to Whatsapp Link ", {
     position: "top-center",
     autoClose: 3000,
     hideProgressBar: false,
@@ -42,7 +42,9 @@ const AddTeamForm = () => {
     try {
       await axios.post(beUrl, formData);
       notify();
-      setTimeout(()=>navigate("/"),4000);
+      // setTimeout(()=>navigate("https://chat.whatsapp.com/L43AtjqvFUcIAM1BckgPfn"),4000);
+      setTimeout(() => window.open("https://chat.whatsapp.com/L43AtjqvFUcIAM1BckgPfn", "_blank"), 4000);
+
     } catch (e) {
       if (e.response) {
         console.error("ServerError:", e.response.data); 

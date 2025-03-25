@@ -57,7 +57,6 @@ const EventDetail = () => {
   };
   // console.log(slug)
 
-
   // Integrate the API fetching logic
   useEffect(() => {
     fetch(API_ENDPOINTS.EVENT_DETAIL(slug))
@@ -99,17 +98,9 @@ const EventDetail = () => {
           location: data.eventVenue || defaultEventData.location,
           teamSize: data.maxParticipantsPerTeam || defaultEventData.teamSize,
           longDescription:
-            data.longDescription || defaultEventData.longDescription,
+            data.eventDescription || defaultEventData.longDescription,
           prizes: data.prizes || defaultEventData.prizes,
-          date: data.date
-            ? new Date(data.date).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })
-            : "Date TBA",
+          date: data.date,
         };
 
         setEventDetails(completeDetails);
@@ -370,20 +361,6 @@ const EventDetail = () => {
               <p className="text-white/80 whitespace-pre-line leading-relaxed text-base md:text-lg">
                 {eventDetails.longDescription}
               </p>
-
-              {eventDetails.prizes && (
-                <div className="mt-8">
-                  <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
-                    Prizes
-                  </h3>
-                  <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-                    {formatPrizes(eventDetails.prizes).map((prize, index) => (
-                      <li key={index}>{prize}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
               {eventDetails.timeline && (
                 <div className="mt-8">
                   <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
@@ -404,6 +381,18 @@ const EventDetail = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+              {eventDetails.prizes && (
+                <div className="mt-8">
+                  <h3 className="text-xl font-semibold mb-4 text-[#E056C1]">
+                    Prizes
+                  </h3>
+                  <ul className="list-disc pl-5 space-y-2 text-white/80 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
+                    {formatPrizes(eventDetails.prizes).map((prize, index) => (
+                      <li key={index}>{prize}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
