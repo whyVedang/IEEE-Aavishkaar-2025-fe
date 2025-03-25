@@ -33,7 +33,7 @@ const AddTeamForm = () => {
   });
 
   async function fetchInfo() {
-    const fetchUrl=`https://vw156683-8006.inc1.devtunnels.ms/aavishkaar/eventId/${id}`;
+const fetchUrl=`https://aavishkaar2025-be.onrender.com/aavishkaar/eventId/${id}`;
     let event_data = await axios.get(fetchUrl);
     console.log("fetched", event_data.data)
     setEventData(event_data.data)
