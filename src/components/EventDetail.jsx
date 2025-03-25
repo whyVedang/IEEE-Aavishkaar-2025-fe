@@ -96,7 +96,7 @@ const EventDetail = () => {
           location: data.eventVenue || defaultEventData.location,
           teamSize: data.maxParticipantsPerTeam || defaultEventData.teamSize,
           longDescription:
-            data.longDescription || defaultEventData.longDescription,
+          data.eventDescription  || defaultEventData.longDescription,
           prizes: data.prizes || defaultEventData.prizes,
           date: data.date
             ? new Date(data.date).toLocaleDateString("en-US", {
