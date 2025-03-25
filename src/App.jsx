@@ -11,6 +11,7 @@ import Sponsors from "./pages/Sponsors";
 import Preloader from "./components/preloader";
 import { useState } from "react";
 import AddTeamForm from "./components/forms/AddTeamForm";
+import RegistrationSuccess from "./components/Acknowledgement";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/:id/teamregister" element={<AddTeamForm/>} />
+          <Route path="/acknowledgement/:id" element={<RegistrationSuccess/>} />
           
         </Routes>
         <ScrollToTop />
