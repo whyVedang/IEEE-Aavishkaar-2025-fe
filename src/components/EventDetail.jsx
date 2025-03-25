@@ -510,7 +510,7 @@ const EventDetail = () => {
             to={`/${eventDetails?.id}/teamregister`}
             className="px-8 py-4 bg-[#E056C1] rounded-lg text-lg font-bold hover:opacity-90 transition-opacity transform hover:scale-105 duration-200"
           >
-            Register for {event?.title}
+            Register Now {event?.title}
           </Link>
         </div>
       </section>

@@ -16,7 +16,7 @@ const FeaturedEvents = () => {
     fetch(API_ENDPOINTS.FEATURED_EVENTS)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("Fetched events:", data);
+        console.log("Featured events:", data);
         const transformedEvents = data.map((event, index) => ({
           id: event.id,
           slug: event.slug,
@@ -25,15 +25,7 @@ const FeaturedEvents = () => {
           title: event.eventName,
           category: event.eventTheme,
           description: event.eventDescription,
-          date: event.date
-            ? new Date(event.date).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })
-            : "Date TBA",
+          date: event.eventDate,
           venue: event.eventVenue || "TBA",
           organiser: event.organiser ? event.organiser : "",
         }));
