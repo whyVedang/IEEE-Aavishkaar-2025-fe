@@ -105,7 +105,7 @@ const Navbar = () => {
           ${
             isScrolled
               ? "bg-white/30 backdrop-blur-lg shadow-lg"
-              : "bg-transparent"
+              : "bg-white/1 backdrop-blur-lg shadow-lg"
           } 
           border-t border-[#2E1E8A]
         `}
